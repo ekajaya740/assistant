@@ -1,0 +1,184 @@
+# ═══════════════════════════════════════════════════════════
+# OpenClaw + Varlock Gitignore
+# ═══════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════
+# SECRETS - NEVER COMMIT THESE
+# ═══════════════════════════════════════════════════════════
+
+# Environment files with actual values
+.env
+.env.*
+!.env.schema
+!.env.example
+
+# Varlock runtime files that might contain decrypted values
+.varlock/
+*.decrypted
+
+# API keys and tokens
+*.key
+*.pem
+*.crt
+*.p12
+
+# ═══════════════════════════════════════════════════════════
+# OPENCLAW DATA
+# ═══════════════════════════════════════════════════════════
+
+# OpenClaw runtime directories (mount points)
+# These should be created locally, not committed
+.openclaw/
+workspace/
+data/
+
+# OpenClaw specific files
+openclaw.json.bak
+openclaw.json.backup
+*.memory.json
+
+# Browser data (if using headless browser)
+browser/
+SingletonLock
+
+# ═══════════════════════════════════════════════════════════
+# DOCKER
+# ═══════════════════════════════════════════════════════════
+
+# Docker volumes and data
+volumes/
+docker-volumes/
+
+# Docker compose override (local customizations)
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+
+# ═══════════════════════════════════════════════════════════
+# LOGS & TEMP FILES
+# ═══════════════════════════════════════════════════════════
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ═══════════════════════════════════════════════════════════
+# NODE / PACKAGE MANAGERS
+# ═══════════════════════════════════════════════════════════
+
+# Dependencies
+node_modules/
+npm_modules/
+.pnpm-store/
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ═══════════════════════════════════════════════════════════
+# IDE & EDITOR
+# ═══════════════════════════════════════════════════════════
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+
+# Vim/Neovim
+*.vim
+.session.vim
+
+# Emacs
+*~
+#*#
+.#*
+
+# ═══════════════════════════════════════════════════════════
+# OS FILES
+# ═══════════════════════════════════════════════════════════
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ═══════════════════════════════════════════════════════════
+# BACKUP FILES
+# ═══════════════════════════════════════════════════════════
+
+# Backup directories
+backups/
+backup/
+*.bak
+*.backup
+*.old
+*.orig
+
+# ═══════════════════════════════════════════════════════════
+# BUILD & GENERATED FILES
+# ═══════════════════════════════════════════════════════════
+
+# Build output
+dist/
+build/
+out/
+.output/
+
+# Generated types (if using varlock type generation)
+env.d.ts
+*.generated.ts
+
+# ═══════════════════════════════════════════════════════════
+# TEST & COVERAGE
+# ═══════════════════════════════════════════════════════════
+
+coverage/
+.nyc_output/
+*.lcov
+
+# ═══════════════════════════════════════════════════════════
+# MISC
+# ═══════════════════════════════════════════════════════════
+
+# Local scripts (personal automation)
+local-scripts/
+scripts/local/
+
+# Notes and scratch files
+notes/
+scratch/
+todo.md
+TODO.md
+
+# CLAUDE.md files that might contain sensitive info
+CLAUDE.md
+claude.md

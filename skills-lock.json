@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "varlock": {
+      "source": "wrsmith108/varlock-claude-skill",
+      "sourceType": "github",
+      "computedHash": "2824a93a3e95776afc78a55d8c6697ec86251d49ed4fa1e8db614ae0fd2381af"
+    }
+  }
+}
