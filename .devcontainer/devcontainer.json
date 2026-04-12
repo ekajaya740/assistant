@@ -1,0 +1,76 @@
+{
+  "name": "Personal Assistant Development",
+  "dockerComposeFile": "../compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.analysis.typeCheckingMode": "basic",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "yaml.format.enable": true,
+        "docker-compose.files": ["${workspaceFolder}/compose.yml"]
+      }
+    }
+  },
+  
+  "forwardPorts": [
+    18789,
+    18790,
+    8080
+  ],
+  "portsAttributes": {
+    "18789": {
+      "label": "OpenClaw Gateway"
+    },
+    "18790": {
+      "label": "OpenClaw Bridge"
+    },
+    "8080": {
+      "label": "File Server"
+    }
+  },
+  
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "HERMES_CONFIG_DIR": "/home/vscode/.hermes",
+    "OPENCLAW_CONFIG_DIR": "/home/vscode/.openclaw"
+  },
+  
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
+  ]
+}

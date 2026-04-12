@@ -1,0 +1,69 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.railway"
+
+[deploy]
+startCommand = "/usr/local/bin/docker-entrypoint.sh openclaw"
+healthcheckPath = "/healthz"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+[[deploy.variables]]
+name = "OPENCLAW_GATEWAY_TOKEN"
+description = "Gateway authentication token"
+
+[[deploy.variables]]
+name = "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS"
+description = "Allow insecure private WebSocket connections"
+
+[[deploy.variables]]
+name = "OPENAI_API_KEY"
+description = "OpenAI API key for LLM provider"
+
+[[deploy.variables]]
+name = "OPENAI_BASE_URL"
+defaultValue = "https://api.openai.com/v1"
+description = "OpenAI-compatible API base URL"
+
+[[deploy.variables]]
+name = "OPENAI_MODEL"
+defaultValue = "gpt-4o"
+description = "Model name for OpenAI-compatible API"
+
+[[deploy.variables]]
+name = "OPENAI_ORG_ID"
+description = "OpenAI organization ID (optional)"
+
+[[deploy.variables]]
+name = "OPENCLAW_GATEWAY_BIND"
+defaultValue = "0.0.0.0"
+description = "Gateway bind address: lan, localhost, or 0.0.0.0"
+
+[[deploy.variables]]
+name = "OPENCLAW_GATEWAY_PORT"
+defaultValue = "18789"
+description = "Gateway HTTP port"
+
+[[deploy.variables]]
+name = "OPENCLAW_BRIDGE_PORT"
+defaultValue = "18790"
+description = "Bridge WebSocket port"
+
+[[deploy.variables]]
+name = "OLLAMA_API_KEY"
+description = "Ollama API key for web search: https://ollama.com/settings/keys"
+
+[[deploy.variables]]
+name = "OLLAMA_HOST"
+defaultValue = "http://host.docker.internal:11434"
+description = "Ollama server URL (for local models)"
+
+[[deploy.variables]]
+name = "OPENCLAW_TZ"
+defaultValue = "UTC"
+description = "Timezone for the container"
+
+[[deploy.variables]]
+name = "DOCKER_GID"
+description = "Docker group ID for sandbox isolation"
