@@ -1,9 +1,9 @@
-FROM ghcr.io/dmno-dev/varlock:latest AS varlock
+FROM nousresearch/hermes-agent:latest
 
-FROM ghcr.io/openclaw/openclaw:main
-COPY --from=varlock /usr/local/bin/varlock /usr/local/bin/varlock
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENV HERMES_INFERENCE_PROVIDER=ollama-cloud
+ENV HERMES_MODEL=kimi-k2.5:cloud
+ENV OLLAMA_BASE_URL=https://ollama.com/v1
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["openclaw"]
+EXPOSE 8642
+
+CMD ["gateway", "run"]

@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════
-# OpenClaw + Varlock Gitignore
+# Hermes Agent Gitignore
 # ═══════════════════════════════════════════════════════════
 
 # ═══════════════════════════════════════════════════════════
@@ -9,12 +9,7 @@
 # Environment files with actual values
 .env
 .env.*
-!.env.schema
 !.env.example
-
-# Varlock runtime files that might contain decrypted values
-.varlock/
-*.decrypted
 
 # API keys and tokens
 *.key
@@ -23,21 +18,16 @@
 *.p12
 
 # ═══════════════════════════════════════════════════════════
-# OPENCLAW DATA
+# HERMES DATA
 # ═══════════════════════════════════════════════════════════
 
-# OpenClaw runtime directories (mount points)
-# These should be created locally, not committed
-.openclaw/
-workspace/
-data/
+# Hermes runtime data directory (mount point)
+hermes-data/
+~/.hermes/
 
-# OpenClaw specific files
-openclaw.json.bak
-openclaw.json.backup
-*.memory.json
+# Hermes specific files
 
-# Browser data (if using headless browser)
+# Browser data
 browser/
 SingletonLock
 
@@ -153,7 +143,7 @@ build/
 out/
 .output/
 
-# Generated types (if using varlock type generation)
+# Generated types
 env.d.ts
 *.generated.ts
 
@@ -169,7 +159,7 @@ coverage/
 # MISC
 # ═══════════════════════════════════════════════════════════
 
-# Local scripts (personal automation)
+# Local scripts
 local-scripts/
 scripts/local/
 

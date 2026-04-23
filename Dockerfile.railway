@@ -1,16 +1,10 @@
-FROM ghcr.io/dmno-dev/varlock:latest AS varlock
+FROM nousresearch/hermes-agent:latest
 
-FROM ghcr.io/openclaw/openclaw:main
-COPY --from=varlock /usr/local/bin/varlock /usr/local/bin/varlock
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENV HERMES_INFERENCE_PROVIDER=ollama-cloud
+ENV HERMES_MODEL=kimi-k2.5:cloud
+ENV OLLAMA_BASE_URL=https://ollama.com/v1
+ENV GATEWAY_BIND=0.0.0.0
 
-ENV OPENCLAW_GATEWAY_BIND=0.0.0.0
-ENV OPENCLAW_GATEWAY_PORT=18789
-ENV OPENCLAW_BRIDGE_PORT=18790
+EXPOSE 8642
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=5 \
-  CMD node -e "fetch('http://127.0.0.1:18789/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
-
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["openclaw"]
+CMD ["gateway", "run"]

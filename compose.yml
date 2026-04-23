@@ -1,67 +1,66 @@
 services:
-  openclaw-gateway:
+  hermes-gateway:
     build:
       context: .
       dockerfile: ./Dockerfile
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      TZ: ${OPENCLAW_TZ:-UTC}
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN:-}
-      OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: ${OPENCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
-      BROWSER: echo
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
-      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o}
-      OPENAI_ORG_ID: ${OPENAI_ORG_ID:-}
-      OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
-    volumes:
-      - ${OPENCLAW_CONFIG_DIR:-./config}:/home/node/.openclaw
-      - ${OPENCLAW_WORKSPACE_DIR:-./workspace}:/home/node/.openclaw/workspace
-    ports:
-      - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
-      - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
-    init: true
+    container_name: hermes-gateway
     restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://127.0.0.1:18789/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
-        ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-
-  openclaw-cli:
-    image: ${OPENCLAW_IMAGE:-openclaw:local}
-    network_mode: "service:openclaw-gateway"
-    cap_drop:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      TZ: ${OPENCLAW_TZ:-UTC}
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN:-}
-      OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: ${OPENCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
-      BROWSER: echo
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
-      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o}
-      OPENAI_ORG_ID: ${OPENAI_ORG_ID:-}
-      OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
+    command: gateway run
+    ports:
+      - "${HERMES_GATEWAY_PORT:-8642}:8642"
     volumes:
-      - ${OPENCLAW_CONFIG_DIR:-./config}:/home/node/.openclaw
-      - ${OPENCLAW_WORKSPACE_DIR:-./workspace}:/home/node/.openclaw/workspace
-    stdin_open: true
-    tty: true
-    init: true
-    entrypoint: ["varlock", "run", "--", "node", "dist/index.js"]
+      - ${HERMES_DATA_DIR:-./hermes-data}:/opt/data
+    networks:
+      - hermes-net
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+    # Environment variables are loaded from .env automatically by Docker Compose
+    # Pass through Hermes-specific variables
+    environment:
+      - OLLAMA_API_KEY=${OLLAMA_API_KEY:-}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-https://ollama.com/v1}
+      - HERMES_INFERENCE_PROVIDER=${HERMES_INFERENCE_PROVIDER:-ollama-cloud}
+      - HERMES_MODEL=${HERMES_MODEL:-kimi-k2.5:cloud}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_ALLOWED_USERS=${TELEGRAM_ALLOWED_USERS:-}
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN:-}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN:-}
+      - SLACK_APP_TOKEN=${SLACK_APP_TOKEN:-}
+      - ANTITHROPIC_API_KEY=${ANTITHROPIC_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - XAI_API_KEY=${XAI_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - GATEWAY_ALLOW_ALL_USERS=${GATEWAY_ALLOW_ALL_USERS:-false}
+
+  hermes-dashboard:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: hermes-dashboard
+    restart: unless-stopped
+    command: dashboard --host 0.0.0.0
+    ports:
+      - "${HERMES_DASHBOARD_PORT:-9119}:9119"
+    volumes:
+      - ${HERMES_DATA_DIR:-./hermes-data}:/opt/data
+    networks:
+      - hermes-net
+    environment:
+      - GATEWAY_HEALTH_URL=http://hermes-gateway:8642
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
     depends_on:
-      - openclaw-gateway
+      - hermes-gateway
+
+networks:
+  hermes-net:
+    driver: bridge

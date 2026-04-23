@@ -1,6 +1,6 @@
 # Personal Assistant
 
-OpenClaw gateway. HTTP/WebSocket API server for AI agents with OpenAI-compatible endpoints.
+Hermes Agent gateway. AI agent with cross-session memory, 70+ built-in skills, and messaging platform integrations.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ nano .env
 docker compose up -d
 ```
 
-Gateway runs on `http://localhost:18789`, WebSocket bridge on port `18790`.
+Gateway runs on `http://localhost:8642`, Dashboard on `http://localhost:9119`.
 
 ## Configuration
 
@@ -22,13 +22,14 @@ Gateway runs on `http://localhost:18789`, WebSocket bridge on port `18790`.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | — | API key for your LLM provider |
-| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | OpenAI-compatible API URL |
-| `OPENAI_MODEL` | `gpt-4o` | Model name |
-| `OPENCLAW_GATEWAY_TOKEN` | — | Gateway authentication token |
-| `OPENCLAW_ALLOW_INSECURE_PRIVATE_WS` | `false` | Allow insecure private WebSocket |
-| `OLLAMA_API_KEY` | — | Ollama API key for web search |
-| `OLLAMA_HOST` | `http://host.docker.internal:11434` | Ollama server URL (for local models) |
+| `OLLAMA_API_KEY` | — | Ollama Cloud API key |
+| `OLLAMA_BASE_URL` | `https://ollama.com/v1` | Ollama API base URL |
+| `HERMES_INFERENCE_PROVIDER` | `ollama-cloud` | Inference provider |
+| `HERMES_MODEL` | `kimi-k2.5:cloud` | Default AI model |
+| `TELEGRAM_BOT_TOKEN` | — | Telegram bot token (optional) |
+| `DISCORD_BOT_TOKEN` | — | Discord bot token (optional) |
+| `SLACK_BOT_TOKEN` | — | Slack bot token (optional) |
+| `OPENROUTER_API_KEY` | — | OpenRouter API key (optional backup) |
 
 Restart after changing `.env`:
 
@@ -36,32 +37,22 @@ Restart after changing `.env`:
 docker compose restart
 ```
 
-## Web Search
+## Messaging Platforms
 
-The `@ollama/openclaw-web-search` plugin is installed automatically on container startup.
+Connect Telegram, Discord, or Slack to chat with your agent from anywhere.
 
-1. Get an Ollama API key at [ollama.com/settings/keys](https://ollama.com/settings/keys)
+1. Get your bot token from the platform
 2. Add to `.env`:
    ```
-   OLLAMA_API_KEY=your-key-here
+   TELEGRAM_BOT_TOKEN=your-telegram-token
+   TELEGRAM_ALLOWED_USERS=your-user-id
    ```
 3. Restart: `docker compose restart`
-
-For local Ollama models, also set:
-```
-OLLAMA_HOST=http://host.docker.internal:11434
-```
-
-Alternatively, authenticate via the OpenClaw chat:
-```
-/websearch auth YOUR_OLLAMA_API_KEY
-/websearch status
-```
 
 ## Commands
 
 ```bash
-docker compose up -d        # Start
+docker compose up -d         # Start
 docker compose down          # Stop
 docker compose logs -f       # Follow logs
 docker compose restart       # Restart
@@ -72,19 +63,22 @@ docker compose down -v       # Stop and remove volumes
 
 ```
 .
-├── compose.yml              # Docker Compose
-├── Dockerfile               # OpenClaw + varlock image
+├── compose.yml              # Docker Compose (hermes-gateway + hermes-dashboard)
+├── Dockerfile               # Hermes base image
 ├── Dockerfile.railway       # Railway variant
 ├── railway.toml             # Railway config
 ├── .env                     # Secrets (git-ignored)
-├── .env.schema              # Varlock schema
 ├── .env.hermes.example      # Environment template
-└── config/                  # OpenClaw config (mounted to container)
-    └── .openclaw/           # Runtime config directory
-        └── workspace/       # Agent workspace
+└── hermes-data/             # Hermes persistent data (mount point)
+    ├── config.yaml          # Agent configuration
+    ├── sessions/            # Conversation history
+    ├── memories/            # Persistent memory
+    ├── skills/              # Installed skills
+    ├── cron/                # Scheduled jobs
+    └── logs/                # Runtime logs
 ```
 
 ## Resources
 
-- [OpenClaw GitHub](https://github.com/openclaw)
-- [Varlock](https://varlock.dev)
+- [Hermes Agent Docs](https://hermes-agent.nousresearch.com)
+- [Ollama Models](https://ollama.com/search)
