@@ -227,6 +227,16 @@ Presenting partial OCR as a clean read is worse than saying "the quality is too 
 
 When the user identifies errors in your reading, ask what specifically was wrong so you can calibrate and encode the correction. Don't just apologize — extract the lesson.
 
+### Stop signal: when to accept the limitation
+
+If the user says **"stop"**, **"stop that"**, **"it's still wrong"**, or otherwise signals frustration after you've presented garbled OCR, do NOT iterate on more PSM modes, preprocessing tricks, or alternative tools. The window for iterative improvement has closed. Instead:
+
+1. **Acknowledge the limitation explicitly** — "This model doesn't support vision, and tesseract can't handle this image quality."
+2. **Offer the high-value pivot** — "Want me to switch to a vision-capable model?" or "Is there another approach you'd prefer?"
+3. **Move on** — don't re-read, re-analyze, or try again unless the user asks.
+
+The stop signal means the user has already concluded the tool isn't up to the task. Continuing to try different angles of the same approach erodes trust faster than accepting the limitation and offering a real solution (model switch, different tool, or a different task entirely).
+
 ---
 
 ## Notes
