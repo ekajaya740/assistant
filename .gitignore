@@ -1,0 +1,53 @@
+# ── Secrets & Credentials ──
+.env
+.env.*
+auth.json
+channel_directory.json
+*_token.json
+*_secret.json
+webui.env
+
+# ── Sessions & Conversations ──
+sessions/
+session_*
+
+# ── Runtime State ──
+gateway*
+kanban.db
+*.pid
+*.lock
+*.sock
+oauth_pending.json
+oauth_last_url.txt
+
+# ── Caches & Temp Files ──
+cache/
+image_cache/
+audio_cache/
+*.pyc
+__pycache__/
+node/
+models_dev_cache.json
+ollama_cloud_models_cache.json
+
+# ── Logs ──
+logs/
+*.log
+
+# ── State DB ──
+state.db
+state.db-shm
+state.db-wal
+
+# ── Sandboxes & Backups ──
+sandboxes/
+config.yaml.bak.*
+
+# ── Binaries ──
+bin/
+
+# ── Hermes Agent Source (separate repo) ──
+hermes-agent/
+
+# ── WebUI ──
+hermes-webui/

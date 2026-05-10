@@ -1,0 +1,3 @@
+Environment: Ubuntu 23.10+, no Chrome sandbox (AppArmor). Tesseract 5.3.4 available with eng+tha. No ImageMagick, no pip in Hermes venv (must use system python for pkg installs). Google Workspace OAuth not yet set up (needs setup.py flow). OCR-and-documents skill installed for image/PDF extraction.
+§
+Hermes WebUI installed at ~/hermes-webui, running as systemd service 'hermes-webui' on port 8787, proxied by nginx at domain assistant.workofekajaya.com. Config file at ~/.hermes/webui.env. SSL not yet configured — waiting for DNS propagation. User can set HERMES_WEBUI_PASSWORD in the env file and restart with sudo systemctl restart hermes-webui.
